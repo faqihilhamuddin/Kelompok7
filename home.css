@@ -10,7 +10,7 @@
 body {
     background-repeat: no-repeat;
     background-attachment: local;
-    background: url(gambar/Background\ colours.jpg);
+    background: url(Background\ colours.jpg);
     color: #333;
     overflow-x: hidden;
 }
