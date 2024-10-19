@@ -49,7 +49,7 @@ signInButton.addEventListener('click', function() {
     } else if (role === 'user') {
         
         signInMessage.style.display = 'block';
-        signInMessage.innerHTML = 'Fitur login pengguna sedang dalam pengembangan.';
+        signInMessage.innerHTML = 'Login';
     } else {
         signInMessage.style.display = 'block';
         signInMessage.innerHTML = 'Email, password, atau role tidak valid!';
