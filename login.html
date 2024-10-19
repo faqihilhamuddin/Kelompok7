@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +10,6 @@
 </head>
 <body>
 
-  
     <nav class="nav">
         <div class="nav-logo">
             <p>KELOMPOK 7</p>
@@ -24,23 +23,20 @@
             </ul>
         </div>
         <div class="nav-button">
-          <button class="btn white-btn" id="signInButton" >Sign In</button>
-          <button class="btn" id="signUpButton" >Sign Up</button>
-      </div>
+            <button class="btn white-btn" id="signInButton" >Masuk</button>
+            <button class="btn" id="signUpButton" >Daftar</button>
+        </div>
     </nav>
 
-    
     <div class="form-container">
         <div class="form-box">
-            
 
             <!-- Form Sign In -->
             <div class="form-content" id="signInForm">
-                <h2 class="form-title">Sign In</h2>
+                <h2 class="form-title">Masuk</h2>
                 <form method="post" action="">
                     <div id="signInMessage" class="messageDiv" style="display:none;"></div>
                     <div class="input-group">
-                        
                         <input type="email" id="email" placeholder="Email" required>
                         <label for="email">Email</label>
                     </div>
@@ -48,25 +44,34 @@
                         <input type="password" id="password" placeholder="Password" required>
                         <label for="password">Password</label>
                     </div>
-                    <button class="btn" id="submitSignIn">Sign In</button>
-                    <p class="recover"><a href="#">Recover Password</a></p>
+                    <!-- Pilihan Role untuk Admin -->
+                    <div class="input-group">
+                        <select id="roleSelect" required>
+                            <option value="" disabled selected>Pilih Role</option>
+                            <option value="user">Pengguna</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                        <label for="roleSelect">Role</label>
+                    </div>
+                    <button type="button" class="btn" id="submitSignIn">Masuk</button>
+                    <p class="recover"><a href="#">Lupa Password?</a></p>
                 </form>
             </div>
 
             <!-- Form Sign Up -->
             <div class="form-content" id="signUpForm" style="display: none;">
-                <h2 class="form-title">Sign Up</h2>
+                <h2 class="form-title">Daftar</h2>
                 <form method="post" action="">
                     <div id="signUpMessage" class="messageDiv" style="display:none;"></div>
                     <div class="input-group">
                         <i class="fas fa-user"></i>
-                        <input type="text" id="fName" placeholder="First Name" required>
-                        <label for="fName">First Name</label>
+                        <input type="text" id="fName" placeholder="Nama Depan" required>
+                        <label for="fName">Nama Depan</label>
                     </div>
                     <div class="input-group">
                         <i class="fas fa-user"></i>
-                        <input type="text" id="lName" placeholder="Last Name" required>
-                        <label for="lName">Last Name</label>
+                        <input type="text" id="lName" placeholder="Nama Belakang" required>
+                        <label for="lName">Nama Belakang</label>
                     </div>
                     <div class="input-group">
                         <i class="fas fa-envelope"></i>
@@ -78,7 +83,7 @@
                         <input type="password" id="rPassword" placeholder="Password" required>
                         <label for="rPassword">Password</label>
                     </div>
-                    <button class="btn" id="submitSignUp">Sign Up</button>
+                    <button type="button" class="btn" id="submitSignUp">Daftar</button>
                 </form>
             </div>
         </div>
