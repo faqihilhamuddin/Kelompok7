@@ -1,20 +1,21 @@
-const signInButton = document.getElementById('submitSignIn');  // Pastikan ID benar
-const signUpButton = document.getElementById('submitSignUp');  // Pastikan ID benar
-const logout = document.getElementById('logout');
-const signInForm = document.getElementById('signInForm');
-const signUpForm = document.getElementById('signUpForm');
-const signInMessage = document.getElementById('signInMessage'); // Pesan kesalahan
+const signInButton = document.getElementById('signInButton');  // ID tombol Masuk
+const signUpButton = document.getElementById('signUpButton');  // ID tombol Daftar
+const submitSignIn = document.getElementById('submitSignIn');  // Tombol submit Masuk
+const submitSignUp = document.getElementById('submitSignUp');  // Tombol submit Daftar
+const signInForm = document.getElementById('signInForm');  // Form Masuk
+const signUpForm = document.getElementById('signUpForm');  // Form Daftar
+const signInMessage = document.getElementById('signInMessage'); // Pesan kesalahan saat login
+const signUpMessage = document.getElementById('signUpMessage'); // Pesan kesalahan saat daftar
 
 // Username dan password admin
 const adminUsername = 'admin';
 const adminPassword = 'admin';
 
-// Tampilan awal
+// Tampilan awal: Tampilkan form masuk dan sembunyikan form daftar
 signInForm.style.display = "block";
-signInForm.classList.add('active');
-signInButton.classList.add('active');
+signUpForm.style.display = "none";
 
-// ke Sign In
+// Saat klik tombol "Masuk", tampilkan form masuk dan sembunyikan form daftar
 signInButton.addEventListener('click', function() {
     signInForm.style.display = "block";
     signUpForm.style.display = "none";
@@ -22,7 +23,7 @@ signInButton.addEventListener('click', function() {
     signUpButton.classList.remove('active');
 });
 
-// ke Sign Up
+// Saat klik tombol "Daftar", tampilkan form daftar dan sembunyikan form masuk
 signUpButton.addEventListener('click', function() {
     signUpForm.style.display = "block";
     signInForm.style.display = "none";
@@ -30,8 +31,8 @@ signUpButton.addEventListener('click', function() {
     signInButton.classList.remove('active');
 });
 
-// login
-signInButton.addEventListener('click', function() {
+// Event listener untuk tombol submit "Masuk"
+submitSignIn.addEventListener('click', function() {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const role = document.getElementById('roleSelect').value;
@@ -43,28 +44,33 @@ signInButton.addEventListener('click', function() {
         return;
     }
 
-    
+    // Cek login admin
     if (role === 'admin' && email === adminUsername && password === adminPassword) {
-        window.location.href = 'admhome.html'; // Arahkan ke halaman admin
+        window.location.href = 'admhome.html'; // Redirect ke halaman admin
     } else if (role === 'user') {
-        
         signInMessage.style.display = 'block';
-        signInMessage.innerHTML = 'Login';
+        signInMessage.innerHTML = 'Login berhasil untuk user!';
     } else {
         signInMessage.style.display = 'block';
         signInMessage.innerHTML = 'Email, password, atau role tidak valid!';
     }
 });
 
-// Logout button functionality (jika diperlukan)
-if (logout) {
-    logout.addEventListener('click', function() {
-        
-        signInForm.style.display = "block";
-        signUpForm.style.display = "none";
-        signInButton.classList.add('active');
-        signUpButton.classList.remove('active');
-        
-       
-    });
-};
+// Event listener untuk tombol submit "Daftar"
+submitSignUp.addEventListener('click', function() {
+    const fName = document.getElementById('fName').value;
+    const lName = document.getElementById('lName').value;
+    const rEmail = document.getElementById('rEmail').value;
+    const rPassword = document.getElementById('rPassword').value;
+
+    // Validasi input
+    if (!fName || !lName || !rEmail || !rPassword) {
+        signUpMessage.style.display = 'block';
+        signUpMessage.innerHTML = 'Semua kolom harus diisi!';
+        return;
+    }
+
+    // Tampilkan pesan sukses (dalam skenario ini, tidak ada penyimpanan data)
+    signUpMessage.style.display = 'block';
+    signUpMessage.innerHTML = 'Pendaftaran berhasil!';
+});
