@@ -1,94 +1,145 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register & Login</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="login.css">
-    <script type="module" src="firebaseauth.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="admhome.css">
+    <title>Home</title>
 </head>
 <body>
 
     <nav class="nav">
         <div class="nav-logo">
-            <p>KELOMPOK 7</p>
+            <p>Mode Admin</p> 
         </div>
         <div class="nav-menu" id="navMenu">
             <ul>
                 <li><a href="#" class="link">Home</a></li>
                 <li><a href="#" class="link">Blog</a></li>
                 <li><a href="#" class="link">Services</a></li>
-                <li><a href="#" class="link ">About</a></li>
+                <li><button class="btn logout" onclick="logout()">Logout</button></li>
+                <li><button class="btn delete" onclick="deleteAccount()">Hapus Akun</button></li>
             </ul>
-        </div>
-        <div class="nav-button">
-            <button class="btn white-btn" id="signInButton" >Masuk</button>
-            <button class="btn" id="signUpButton" >Daftar</button>
         </div>
     </nav>
 
-    <div class="form-container">
-        <div class="form-box">
+    <main>
+        <section class="user-list">
+            <h2>Daftar Pengguna</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nama Depan</th>
+                        <th>Nama Belakang</th>
+                        <th>Email</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="userTable">
+                    <!-- Data pengguna akan dimuat di sini -->
+                </tbody>
+            </table>
+        </section>
+    </main>
 
-            <!-- Form Sign In -->
-            <div class="form-content" id="signInForm">
-                <h2 class="form-title">Masuk</h2>
-                <form method="post" action="">
-                    <div id="signInMessage" class="messageDiv" style="display:none;"></div>
-                    <div class="input-group">
-                        <input type="email" id="email" placeholder="Email" required>
-                        <label for="email">Email</label>
-                    </div>
-                    <div class="input-group">
-                        <input type="password" id="password" placeholder="Password" required>
-                        <label for="password">Password</label>
-                    </div>
-                    <!-- Pilihan Role untuk Admin -->
-                    <div class="input-group">
-                        <select id="roleSelect" required>
-                            <option value="" disabled selected>Pilih Role</option>
-                            <option value="user">Pengguna</option>
-                            <option value="admin">Admin</option>
-                        </select>
-                        <label for="roleSelect">Role</label>
-                    </div>
-                    <button type="button" class="btn" id="submitSignIn">Masuk</button>
-                    <p class="recover"><a href="#">Lupa Password?</a></p>
-                </form>
-            </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+        import { getAuth, deleteUser } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { getFirestore, collection, getDocs, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
 
-            <!-- Form Sign Up -->
-            <div class="form-content" id="signUpForm" style="display: none;">
-                <h2 class="form-title">Daftar</h2>
-                <form method="post" action="">
-                    <div id="signUpMessage" class="messageDiv" style="display:none;"></div>
-                    <div class="input-group">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="fName" placeholder="Nama Depan" required>
-                        <label for="fName">Nama Depan</label>
-                    </div>
-                    <div class="input-group">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="lName" placeholder="Nama Belakang" required>
-                        <label for="lName">Nama Belakang</label>
-                    </div>
-                    <div class="input-group">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="rEmail" placeholder="Email" required>
-                        <label for="rEmail">Email</label>
-                    </div>
-                    <div class="input-group">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="rPassword" placeholder="Password" required>
-                        <label for="rPassword">Password</label>
-                    </div>
-                    <button type="button" class="btn" id="submitSignUp">Daftar</button>
-                </form>
-            </div>
-        </div>
-    </div>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCIg6W43aFMst9RuZhp_XzsJCAcV3bhwwc",
+            authDomain: "kel777.firebaseapp.com",
+            projectId: "kel777",
+            storageBucket: "kel777.appspot.com",
+            messagingSenderId: "54577150898",
+            appId: "1:54577150898:web:a00d2714f67f0ddbf1c2ab",
+            measurementId: "G-CZVEN08RZ3"
+        };
 
-    <script src="script.js"></script>
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const db = getFirestore();
+
+        // Logout function
+        function logout() {
+            window.location.href = 'login.html'; 
+        }
+
+        // Delete Account function
+        function deleteAccount() {
+            const user = auth.currentUser;
+
+            if (user) {
+                const confirmation = confirm("Apakah Anda yakin ingin menghapus akun ini?");
+                if (!confirmation) return;
+
+                // Hapus data pengguna dari Firestore
+                const userDocRef = doc(db, "users", user.uid);
+                deleteDoc(userDocRef)
+                    .then(() => {
+                        // Hapus akun dari Firebase Authentication
+                        deleteUser(user)
+                            .then(() => {
+                                alert("Akun berhasil dihapus.");
+                                window.location.href = "login.html"; // Arahkan ke halaman login
+                            })
+                            .catch((error) => {
+                                console.error("Gagal menghapus akun:", error);
+                                alert("Terjadi kesalahan saat menghapus akun. Silakan coba lagi.");
+                            });
+                    })
+                    .catch((error) => {
+                        console.error("Gagal menghapus data pengguna:", error);
+                        alert("Terjadi kesalahan saat menghapus data pengguna.");
+                    });
+            } else {
+                alert("Tidak ada pengguna yang sedang login.");
+            }
+        }
+
+        // Load user data
+        async function loadUsers() {
+            const userTable = document.getElementById("userTable");
+            const querySnapshot = await getDocs(collection(db, "users"));
+
+            querySnapshot.forEach((doc) => {
+                const userData = doc.data();
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${userData.firstName}</td>
+                    <td>${userData.lastName}</td>
+                    <td>${userData.email}</td>
+                    <td><button onclick="deleteUserById('${doc.id}')">Hapus</button></td>
+                `;
+                userTable.appendChild(row);
+            });
+        }
+
+        // Delete specific user by ID
+        async function deleteUserById(userId) {
+            const confirmation = confirm("Apakah Anda yakin ingin menghapus pengguna ini?");
+            if (!confirmation) return;
+
+            const userDocRef = doc(db, "users", userId);
+            deleteDoc(userDocRef)
+                .then(() => {
+                    alert("Pengguna berhasil dihapus.");
+                    location.reload(); // Refresh halaman setelah menghapus pengguna
+                })
+                .catch((error) => {
+                    console.error("Gagal menghapus pengguna:", error);
+                    alert("Terjadi kesalahan saat menghapus pengguna.");
+                });
+        }
+
+        // Load users on page load
+        loadUsers();
+    </script>
+
 </body>
 </html>
